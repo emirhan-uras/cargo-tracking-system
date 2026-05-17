@@ -23,4 +23,7 @@ public class Branch {
 
     @Column(nullable = false, length = 500)
     private String address;
+
+    @Column
+    private String phone;
 }
