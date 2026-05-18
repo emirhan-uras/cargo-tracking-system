@@ -35,4 +35,13 @@ public class CargoController {
         CargoDetailResponse response = cargoService.getCargoDetailsByTrackingNumber(trackingNumber);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/calculate-price")
+    public ResponseEntity<Double> calculatePrice(
+            @RequestParam String origin,
+            @RequestParam String destination) {
+
+        Double price = cargoService.calculatePriceForVisitor(origin, destination);
+        return ResponseEntity.ok(price);
+    }
 }

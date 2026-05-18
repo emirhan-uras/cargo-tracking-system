@@ -28,14 +28,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-
                 .csrf(AbstractHttpConfigurer::disable)
-
                 .authorizeHttpRequests(auth -> auth
 
                         .requestMatchers("/api/auth/**").permitAll()
-
                         .requestMatchers("/api/cargo/track/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/cargos/track/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/cargos/calculate-price").permitAll()
 
                         .anyRequest().authenticated()
                 )

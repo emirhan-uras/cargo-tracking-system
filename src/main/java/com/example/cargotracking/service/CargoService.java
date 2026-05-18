@@ -85,15 +85,14 @@ public class CargoService {
 
         double distanceKm = openRouteService.getDistanceInKm(startCoords, endCoords);
 
-        double basePrice = 40.0;
+        double basePrice = 90.0;
 
-        double pricePerKm = 4.5;
+        double pricePerKm = 0.25;
 
         double finalPrice = basePrice + (distanceKm * pricePerKm);
 
         return Math.round(finalPrice * 100.0) / 100.0;
     }
-
 
     private CargoResponse convertToResponse(Cargo cargo) {
         CargoResponse response = new CargoResponse();
@@ -114,7 +113,6 @@ public class CargoService {
         return response;
     }
 
-
     private CargoDetailResponse convertToDetailResponse(Cargo cargo) {
         CargoDetailResponse response = new CargoDetailResponse();
         response.setId(cargo.getId());
@@ -129,5 +127,9 @@ public class CargoService {
         response.setCurrentBranchName(cargo.getCurrentBranch().getName());
 
         return response;
+    }
+
+    public Double calculatePriceForVisitor(String origin, String destination) {
+        return calculateDistanceAndPrice(origin, destination);
     }
 }
