@@ -3,10 +3,9 @@ package com.example.cargotracking.dto.response;
 import com.example.cargotracking.entity.enums.CargoStatus;
 import lombok.Data;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
-public class CargoDetailResponse {
+public class CargoResponse {
     private Long id;
     private String trackingNumber;
     private String senderUsername;
@@ -18,6 +17,4 @@ public class CargoDetailResponse {
     private Double estimatedPrice;
     private String currentBranchName;
     private String assignedCourierName;
-
-    private List<CargoMovementResponse> movements;
 }

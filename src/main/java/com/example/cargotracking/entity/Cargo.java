@@ -4,6 +4,7 @@ import com.example.cargotracking.entity.enums.CargoStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "cargos")
@@ -25,8 +26,14 @@ public class Cargo {
     private User sender;
 
     @ManyToOne
-    @JoinColumn(name = "receiver_id", nullable = false)
+    @JoinColumn(name = "receiver_id", nullable = true)
     private User receiver;
+
+    @Column(nullable = false)
+    private String receiverName;
+
+    @Column(nullable = false)
+    private String receiverPhone;
 
     @Column(nullable = false, length = 1000)
     private String deliveryAddress;
@@ -34,6 +41,12 @@ public class Cargo {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private CargoStatus currentStatus;
+
+    @Column(name = "pickup_time")
+    private LocalDateTime pickupTime;
+
+    @Column(nullable = false)
+    private Double estimatedPrice;
 
     @ManyToOne
     @JoinColumn(name = "current_branch_id")
