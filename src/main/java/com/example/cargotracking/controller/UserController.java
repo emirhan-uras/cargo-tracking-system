@@ -36,4 +36,12 @@ public class UserController {
 
         return ResponseEntity.ok("E-posta adresiniz başarıyla güncellendi.");
     }
+
+    @DeleteMapping("/account")
+    public ResponseEntity<String> deleteAccount(Authentication authentication) {
+        String username = authentication.getName();
+        userService.deleteUser(username);
+
+        return ResponseEntity.ok("Hesabınız başarıyla kapatıldı ve verileriniz arşivlendi.");
+    }
 }

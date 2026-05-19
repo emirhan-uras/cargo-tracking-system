@@ -4,6 +4,7 @@ import com.example.cargotracking.dto.request.AddressCreateRequest;
 import com.example.cargotracking.dto.response.AddressResponse;
 import com.example.cargotracking.entity.Address;
 import com.example.cargotracking.entity.User;
+import com.example.cargotracking.exception.BusinessException;
 import com.example.cargotracking.exception.ResourceNotFoundException;
 import com.example.cargotracking.repository.AddressRepository;
 import com.example.cargotracking.repository.UserRepository; // User verisine erişmek için eklendi
@@ -36,6 +37,17 @@ public class AddressService {
 
         Address savedAddress = addressRepository.save(address);
         return convertToResponse(savedAddress);
+    }
+
+    public void deleteAddress(Long addressId, String username) {
+        Address address = addressRepository.findById(addressId)
+                .orElseThrow(() -> new ResourceNotFoundException("Adres bulunamadı! ID: " + addressId));
+
+        if (!address.getUser().getUsername().equals(username)) {
+            throw new BusinessException("Bu adresi silme yetkiniz bulunmamaktadır.");
+        }
+
+        addressRepository.delete(address);
     }
 
     public List<AddressResponse> getAllAddresses() {

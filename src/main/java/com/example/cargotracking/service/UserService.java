@@ -45,4 +45,11 @@ public class UserService {
 
         userRepository.save(user);
     }
+
+    public void deleteUser(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Kullanıcı bulunamadı."));
+
+        userRepository.delete(user);
+    }
 }

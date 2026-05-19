@@ -45,7 +45,7 @@ public class BranchService {
 
     public void deleteBranch(Long id) {
         if (!branchRepository.existsById(id)) {
-            throw new BusinessException("Silinmek istenen şube bulunamadı! ID: " + id);
+            throw new ResourceNotFoundException("Silinmek istenen şube bulunamadı! ID: " + id);
         }
         branchRepository.deleteById(id);
     }
