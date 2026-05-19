@@ -6,6 +6,8 @@ import com.example.cargotracking.dto.request.RegisterRequest;
 import com.example.cargotracking.dto.response.AuthResponse;
 import com.example.cargotracking.entity.User;
 import com.example.cargotracking.entity.enums.Role;
+import com.example.cargotracking.exception.BusinessException;
+import com.example.cargotracking.exception.ResourceNotFoundException;
 import com.example.cargotracking.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,10 +27,10 @@ public class AuthService {
     public String register(RegisterRequest request) {
 
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("Bu kullanıcı adı zaten alınmış!");
+            throw new BusinessException("Bu kullanıcı adı zaten alınmış!");
         }
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Bu e-posta adresi zaten kullanımda!");
+            throw new BusinessException("Bu e-posta adresi zaten kullanımda!");
         }
 
 
@@ -54,7 +56,7 @@ public class AuthService {
         );
 
         User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Kullanıcı bulunamadı!"));
 
         String token = jwtUtil.generateToken(user.getUsername(), user.getRole().name());
 

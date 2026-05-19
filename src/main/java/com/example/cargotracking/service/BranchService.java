@@ -4,6 +4,8 @@ import com.example.cargotracking.dto.request.BranchCreateRequest;
 import com.example.cargotracking.dto.request.BranchCreateRequest;
 import com.example.cargotracking.dto.response.BranchResponse;
 import com.example.cargotracking.entity.Branch;
+import com.example.cargotracking.exception.BusinessException;
+import com.example.cargotracking.exception.ResourceNotFoundException;
 import com.example.cargotracking.repository.BranchRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,13 +39,13 @@ public class BranchService {
 
     public BranchResponse getBranchById(Long id) {
         Branch branch = branchRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Şube bulunamadı! ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Şube bulunamadı! ID: " + id));
         return convertToResponse(branch);
     }
 
     public void deleteBranch(Long id) {
         if (!branchRepository.existsById(id)) {
-            throw new RuntimeException("Silinmek istenen şube bulunamadı! ID: " + id);
+            throw new BusinessException("Silinmek istenen şube bulunamadı! ID: " + id);
         }
         branchRepository.deleteById(id);
     }

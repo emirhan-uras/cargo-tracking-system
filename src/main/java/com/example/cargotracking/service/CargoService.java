@@ -7,6 +7,7 @@ import com.example.cargotracking.entity.Branch;
 import com.example.cargotracking.entity.Cargo;
 import com.example.cargotracking.entity.User;
 import com.example.cargotracking.entity.enums.CargoStatus;
+import com.example.cargotracking.exception.ResourceNotFoundException;
 import com.example.cargotracking.repository.BranchRepository;
 import com.example.cargotracking.repository.CargoRepository;
 import com.example.cargotracking.repository.SystemSettingRepository;
@@ -36,11 +37,11 @@ public class CargoService {
 
         String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         User sender = userRepository.findByUsername(currentUsername)
-                .orElseThrow(() -> new RuntimeException("Gönderici kullanıcı bulunamadı!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Gönderici kullanıcı bulunamadı!"));
 
 
         Branch branch = branchRepository.findById(request.getCurrentBranchId())
-                .orElseThrow(() -> new RuntimeException("Seçilen şube bulunamadı!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Seçilen şube bulunamadı!"));
 
         Cargo cargo = new Cargo();
 
@@ -77,7 +78,7 @@ public class CargoService {
 
     public CargoDetailResponse getCargoDetailsByTrackingNumber(String trackingNumber) {
         Cargo cargo = cargoRepository.findByTrackingNumber(trackingNumber)
-                .orElseThrow(() -> new RuntimeException("Bu takip koduna ait bir kargo bulunamadı: " + trackingNumber));
+                .orElseThrow(() -> new ResourceNotFoundException("Bu takip koduna ait bir kargo bulunamadı: " + trackingNumber));
         return convertToDetailResponse(cargo);
     }
 

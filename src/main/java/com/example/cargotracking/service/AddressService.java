@@ -4,6 +4,7 @@ import com.example.cargotracking.dto.request.AddressCreateRequest;
 import com.example.cargotracking.dto.response.AddressResponse;
 import com.example.cargotracking.entity.Address;
 import com.example.cargotracking.entity.User;
+import com.example.cargotracking.exception.ResourceNotFoundException;
 import com.example.cargotracking.repository.AddressRepository;
 import com.example.cargotracking.repository.UserRepository; // User verisine erişmek için eklendi
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class AddressService {
         String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 
         User user = userRepository.findByUsername(currentUsername)
-                .orElseThrow(() -> new RuntimeException("Oturum açmış kullanıcı veritabanında bulunamadı!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Oturum açmış kullanıcı veritabanında bulunamadı!"));
 
         Address address = new Address();
         address.setAddressTitle(request.getAddressTitle());
@@ -46,7 +47,7 @@ public class AddressService {
 
     public AddressResponse getAddressById(Long id) {
         Address address = addressRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Adres bulunamadı! ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Adres bulunamadı! ID: " + id));
         return convertToResponse(address);
     }
 
