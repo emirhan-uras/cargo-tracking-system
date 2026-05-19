@@ -9,9 +9,11 @@ import com.example.cargotracking.entity.User;
 import com.example.cargotracking.entity.enums.CargoStatus;
 import com.example.cargotracking.repository.BranchRepository;
 import com.example.cargotracking.repository.CargoRepository;
+import com.example.cargotracking.repository.SystemSettingRepository;
 import com.example.cargotracking.repository.UserRepository;
 import com.example.cargotracking.service.external.OpenRouteService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CargoService {
 
+    @Autowired
+    private SystemSettingRepository systemSettingRepository;
     private final CargoRepository cargoRepository;
     private final UserRepository userRepository;
     private final BranchRepository branchRepository;
@@ -80,14 +84,16 @@ public class CargoService {
     private Double calculateDistanceAndPrice(String originAddress, String destinationAddress) {
 
         double[] startCoords = openRouteService.getCoordinates(originAddress);
-
         double[] endCoords = openRouteService.getCoordinates(destinationAddress);
-
         double distanceKm = openRouteService.getDistanceInKm(startCoords, endCoords);
 
-        double basePrice = 90.0;
+        double basePrice = systemSettingRepository.findById("CARGO_BASE_PRICE")
+                .map(setting -> Double.parseDouble(setting.getValue()))
+                .orElseThrow(() -> new RuntimeException("Sistem ayarları okunamıyor. Lütfen daha sonra tekrar deneyiniz."));
 
-        double pricePerKm = 0.25;
+        double pricePerKm = systemSettingRepository.findById("CARGO_PRICE_PER_KM")
+                .map(setting -> Double.parseDouble(setting.getValue()))
+                .orElseThrow(() -> new RuntimeException("Sistem ayarları okunamıyor. Lütfen daha sonra tekrar deneyiniz."));
 
         double finalPrice = basePrice + (distanceKm * pricePerKm);
 

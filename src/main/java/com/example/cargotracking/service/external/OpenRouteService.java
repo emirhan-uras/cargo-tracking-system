@@ -31,7 +31,8 @@ public class OpenRouteService {
             double lat = coordinatesNode.get(1).asDouble();
 
             return new double[]{lon, lat};
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return new double[]{35.48, 38.72};
         }
     }
@@ -49,7 +50,8 @@ public class OpenRouteService {
                     .path("properties").path("summary").path("distance").asDouble();
 
             return distanceInMeters / 1000.0;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return 300.0;
         }
     }
